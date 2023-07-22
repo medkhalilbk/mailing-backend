@@ -7,6 +7,7 @@ const cors = require('cors');
 const passport = require('passport');
 const httpStatus = require('http-status');
 const config = require('./config/config');
+const fileupload = require("express-fileupload");
 const morgan = require('./config/morgan');
 const { jwtStrategy } = require('./config/passport');
 const { authLimiter } = require('./middlewares/rateLimiter');
@@ -36,7 +37,7 @@ app.use(mongoSanitize());
 
 // gzip compression
 app.use(compression());
-
+app.use(fileupload());
 // enable cors
 app.use(cors());
 app.options('*', cors());
@@ -63,5 +64,4 @@ app.use(errorConverter);
 
 // handle error
 app.use(errorHandler);
-
 module.exports = app;
