@@ -3,12 +3,11 @@ const auth = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
 const userValidation = require('../../validations/user.validation');
 const userController = require('../../controllers/user.controller');
-const importMailsController = require('../../controllers/mails.controller').importMails
+const importMailsController = require('../../controllers/mails.controller').importMails;
+const getMails = require('../../controllers/mails.controller').getMails;
 const router = express.Router();
 
-router
-  .route('/')
-  .post(auth('manageUsers'), importMailsController) 
+router.route('/').post(auth('manageUsers'), importMailsController).get(auth('manageUsers') , getMails);
  
 module.exports = router;
 
