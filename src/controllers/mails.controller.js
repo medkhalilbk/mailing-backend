@@ -31,8 +31,9 @@ const importMails = catchAsync(async (req, res) => {
                 fs.createReadStream(path).pipe((
                     parse({ delimiter: "," }).on("data", function (row) {
                         clientModel.create({
-                            fullName: row[0], email: row[1], number: row[2] , country:row[3]
+                            company: row[0], fullName: row[1], phoneNumber: row[2] , country:row[3]
                     }) 
+                     
                    })
                ))
               return res.send({ status: 'success', name: uuidv4()+".csv" });
