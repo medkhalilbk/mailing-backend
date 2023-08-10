@@ -5,9 +5,10 @@ const { toJSON, paginate } = require('./plugins');
 const { roles } = require('../config/roles');
 
 const MailSchema = mongoose.Schema({
-  userId: String,
+  userId: mongoose.Types.ObjectId,
   path: String,
   name: String,
+  fileSize: Number,
   time: { type: Date, default: Date.now },
 });
 

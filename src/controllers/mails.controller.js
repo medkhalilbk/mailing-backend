@@ -6,7 +6,8 @@ const MailModel = require('../models/mail.model');
 const readCsvFromBuffer = require('../services/mails.service').readCsvFromBuffer
 const fs = require('fs');
 const { parse } = require('csv-parse');
-const clientModel = require('../models/client.model');
+const clientModel = require('../models/client.model'); 
+const { mongoose } = require('mongoose');;
 const importMails = catchAsync(async (req, res) => {
      if (req.files.mailFile.name.slice(-3) !== "csv") {
         return res.status(500).send({
@@ -22,20 +23,35 @@ const importMails = catchAsync(async (req, res) => {
               if (err) {
                   res.status(500).send(err);
                   console.log(err);
-              }
-               await MailModel.create({
-                 userId: 'test',
-                 path: uuidv4() + '.csv', 
-                 name:req.body.name
-               });
+              } 
+
                 fs.createReadStream(path).pipe((
-                    parse({ delimiter: "," }).on("data", function (row) {
-                        clientModel.create({
-                            company: row[0], fullName: row[1], phoneNumber: row[2] , country:row[3]
-                    }) 
+                    parse({ delimiter: "," }).on("data", async function (row) {
+                            const verifyRow = row.join('');
+                            if (!verifyRow.length) {
+                              console.log('empty line');
+                              return;
+                            }
+                        const userId = await new mongoose.Types.ObjectId(req.body.userId)
+                        console.log(userId)
+                        await clientModel.create({
+                          company: row[0],
+                          fullName: row[1],
+                          phoneNumber: row[2],
+                          email: row[3],
+                          country: row[4],
+                          sector: row[5],
+                          userId: req.body.userId,
+                        }); 
                      
                    })
-               ))
+                ))
+                               await MailModel.create({
+                                 userId: req.body.userId,
+                                 path: uuidv4() + '.csv',
+                                 name: req.body.name,
+                                 fileSize: 0,
+                               });
               return res.send({ status: 'success', name: uuidv4()+".csv" });
             });
         
@@ -44,7 +60,8 @@ const importMails = catchAsync(async (req, res) => {
     }
 });
 const getMails = catchAsync(async (req, res) => {
-    console.log(req.body)
+    const mails = await clientModel.find(); 
+    return res.send({message:mails})
 } )
 
 module.exports = {
