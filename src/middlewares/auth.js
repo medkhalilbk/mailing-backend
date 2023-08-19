@@ -2,7 +2,8 @@ const passport = require('passport');
 const httpStatus = require('http-status');
 const ApiError = require('../utils/ApiError');
 const { roleRights } = require('../config/roles');
-
+const { getUserIdFromJwt } = require('../services/token.service');
+const removeBearerPrefix = require('../services/token.service').removeBearerPrefix
 const verifyCallback = (req, resolve, reject, requiredRights) => async (err, user, info) => {
   if (err || info || !user) {
     return reject(new ApiError(httpStatus.UNAUTHORIZED, 'Please authenticate'));
@@ -24,7 +25,12 @@ const auth = (...requiredRights) => async (req, res, next) => {
   return new Promise((resolve, reject) => {
     passport.authenticate('jwt', { session: false }, verifyCallback(req, resolve, reject, requiredRights))(req, res, next);
   })
-    .then(() => next())
+    
+    .then(() => {
+      let plainJWT = removeBearerPrefix(req.headers['authorization']);
+      res.locals.userId = getUserIdFromJwt(plainJWT).sub || null; 
+      next();
+    })
     .catch((err) => next(err));
 };
 

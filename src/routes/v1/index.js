@@ -3,8 +3,9 @@ const authRoute = require('./auth.route');
 const userRoute = require('./user.route');
 const mailRoute = require('./mails.route');
 const docsRoute = require('./docs.route');
+const filesRoute = require('./files.route');
 const config = require('../../config/config');
-
+const mailingRoutes = require('./mailing.route')
 const router = express.Router();
 
 const defaultRoutes = [
@@ -17,8 +18,16 @@ const defaultRoutes = [
     route: userRoute,
   },
   {
-    path: '/mails',
+    path: '/clients',
     route: mailRoute,
+  },
+  {
+    path: '/files',
+    route: filesRoute,
+  },
+  {
+    path: '/sendMails',
+    route: mailingRoutes,
   },
 ];
 

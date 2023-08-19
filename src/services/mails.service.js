@@ -1,4 +1,5 @@
 const csvtojsonV2 = require("csvtojson/v2");
+const sgMail = require('@sendgrid/mail');
 
 const readCsvFromBuffer = (buffer) => {
   return new Promise((resolve, reject) => {
@@ -20,5 +21,24 @@ const readCsvFromBuffer = (buffer) => {
       });
   });
 };
+const sendEmail = async (reciever, from, subject, html) => {
+  async () => {
+   const msg = {
+     to: reciever,
+     from: from, 
+     subject: subject,
+     html: html,
+   };
+    try {
+      await sgMail.send(msg);
+    } catch (error) {
+      console.error(error);
 
-module.exports = { readCsvFromBuffer };
+      if (error.response) {
+        console.error(error.response.body);
+      }
+    }
+  }  ;
+}
+
+module.exports = { sendEmail };

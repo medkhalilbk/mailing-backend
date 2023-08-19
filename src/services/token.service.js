@@ -112,8 +112,23 @@ const generateVerifyEmailToken = async (user) => {
   await saveToken(verifyEmailToken, user.id, expires, tokenTypes.VERIFY_EMAIL);
   return verifyEmailToken;
 };
+const getUserIdFromJwt = (jwtString) => { return jwt.decode((jwtString) )  };
 
+const removeBearerPrefix = (token) => {
+  if (typeof token !== 'string') {
+    throw new Error('Input must be a string');
+  }
+
+  const bearerPrefix = 'Bearer ';
+  if (token.startsWith(bearerPrefix)) {
+    return token.slice(bearerPrefix.length);
+  }
+
+  return token;
+};
 module.exports = {
+  getUserIdFromJwt, 
+  removeBearerPrefix , 
   generateToken,
   saveToken,
   verifyToken,

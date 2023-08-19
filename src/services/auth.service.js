@@ -76,6 +76,9 @@ const resetPassword = async (resetPasswordToken, newPassword) => {
  * @param {string} verifyEmailToken
  * @returns {Promise}
  */
+
+
+
 const verifyEmail = async (verifyEmailToken) => {
   try {
     const verifyEmailTokenDoc = await tokenService.verifyToken(verifyEmailToken, tokenTypes.VERIFY_EMAIL);
@@ -95,5 +98,5 @@ module.exports = {
   logout,
   refreshAuth,
   resetPassword,
-  verifyEmail,
+  verifyEmail 
 };
