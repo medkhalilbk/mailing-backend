@@ -69,9 +69,11 @@ const httpsServer = https.createServer(
   },
   app
 );
+
+// handle error
+app.use(errorHandler);
+
 httpsServer.listen(443, () => {
   console.log('HTTPS Server running on port 443');
 });
-// handle error
-app.use(errorHandler);
 module.exports = app;
