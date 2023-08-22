@@ -4,8 +4,10 @@ const importMailsController = require('../../controllers/mails.controller').impo
 const getMails = require('../../controllers/mails.controller').getMails;
 const deleteMail = require('../../controllers/mails.controller').deleteClient
 const updateClient = require('../../controllers/mails.controller').updateClient
+const addClient = require('../../controllers/mails.controller').addClient
 const router = express.Router(); 
 router.route('/import').post(auth('manageUsers'), importMailsController)
+router.route('/').post(auth('manageUsers'), addClient)
 router.route('/:id').delete(auth('manageUsers'), deleteMail);
 router.route('/:id').put(auth('manageUsers'), updateClient);
 router.route('/').get(auth('manageUsers'), getMails)

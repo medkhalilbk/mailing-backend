@@ -31,8 +31,7 @@ const defaultRoutes = [
   },
 ];
 
-const devRoutes = [
-  // routes available only in development mode
+const devRoutes = [ 
   {
     path: '/docs',
     route: docsRoute,

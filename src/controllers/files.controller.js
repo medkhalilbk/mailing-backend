@@ -3,7 +3,7 @@ const { v4: uuidv4 } = require('uuid');
 const mailModel = require('../models/mail.model');
 const getFilesById = async (req, res) => {
   try {
-    const files = await mailModel.find({ userId: res.locals.userId });
+    const files = await mailModel.find({ userId: res.locals.userId }).sort({ time: -1 });
     return res.send({ message: files });
   } catch (error) {
     console.log(error);
