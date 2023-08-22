@@ -14,8 +14,7 @@ const { authLimiter } = require('./middlewares/rateLimiter');
 const routes = require('./routes/v1');
 const { errorConverter, errorHandler } = require('./middlewares/error');
 const ApiError = require('./utils/ApiError');
-const https = require('https');
-const fs = require('fs');
+const https = require('https'); 
 const app = express();
 
 if (config.env !== 'test') {
@@ -62,18 +61,9 @@ app.use((req, res, next) => {
 
 // convert error to ApiError, if needed
 app.use(errorConverter);
-const httpsServer = https.createServer(
-  {
-    key: fs.readFileSync(require.resolve('./ssl/key.pem')),
-    cert: fs.readFileSync(require.resolve('./ssl/certif.pem')),
-  },
-  app
-);
+ 
 
 // handle error
 app.use(errorHandler);
-
-httpsServer.listen(443, () => {
-  console.log('HTTPS Server running on port 443');
-});
+ 
 module.exports = app;
